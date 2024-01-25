@@ -1,26 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Todos } from './components/Todos'
 import {
   type FilterValue,
   type TodoId,
   type TodoTitle,
-  type Todo as TodoType
+  type Todo as TodoType,
+  type TodosList
 } from './types'
 import { TODO_FILTERS } from './const'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
-
-const mockTodos = [
-  { id: '1', title: 'todo 1', completed: false },
-  { id: '2', title: 'todo 2', completed: false },
-  { id: '3', title: 'todo 3', completed: true }
-]
+import { fetchTodos, updateTodos } from './services/todos'
 
 const App: React.FC = (): JSX.Element => {
-  const [todos, setTodos] = useState(mockTodos)
+  const [todos, setTodos] = useState([] as TodosList)
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
     TODO_FILTERS.ALL
   )
+
+  useEffect(() => {
+    fetchTodos().then((todos) => {
+      setTodos(todos)
+    }).catch((e) => { console.log(e) })
+  }, [])
 
   const handleRemove = ({ id }: TodoId): void => {
     const newTodos = todos.filter((todo) => todo.id !== id)
@@ -41,6 +43,7 @@ const App: React.FC = (): JSX.Element => {
       return todo
     })
     setTodos(newTodos)
+    updateTodos(newTodos).catch((e) => { console.log(e) })
   }
 
   const handleFilterChange = (filter: FilterValue): void => {
@@ -50,6 +53,7 @@ const App: React.FC = (): JSX.Element => {
   const handleRemoveCompleted = (): void => {
     const newTodos = todos.filter((todo) => !todo.completed)
     setTodos(newTodos)
+    updateTodos(newTodos).catch((e) => { console.log(e) })
   }
 
   const handleAddTodo = ({ title }: TodoTitle): void => {
@@ -60,6 +64,7 @@ const App: React.FC = (): JSX.Element => {
     }
     const newTodos = [...todos, newTodo]
     setTodos(newTodos)
+    updateTodos(newTodos).catch((e) => { console.log(e) })
   }
 
   const activeCount = todos.filter((todo) => !todo.completed).length
