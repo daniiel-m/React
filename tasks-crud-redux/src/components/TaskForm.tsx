@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TaskForm as TaskFormType } from "../types";
+import { TaskForm as TaskFormType, Task as TaskType } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask, updateTask } from "../features/tasks/taskSlice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,14 +17,14 @@ const TaskForm: React.FC = () => {
 
   useEffect(() => {
     if (params.id) {
-      setTask(tasks.find(el => el.id === params.id) as TaskFormType)
+      setTask(tasks.find((el: TaskType) => el.id === params.id) as TaskType);
     }
   }, [tasks, params.id]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(params.id){
-      dispatch(updateTask(task))
+    if (params.id) {
+      dispatch(updateTask(task));
     } else {
       dispatch(
         addTask({
@@ -46,18 +46,22 @@ const TaskForm: React.FC = () => {
   };
   return (
     <form onSubmit={handleSubmit} className="bg-zinc-800 max-w-sm p-4">
-      <label htmlFor="title" className="block text-xs font-bold mb-2">Task:</label>
+      <label htmlFor="title" className="block text-xs font-bold mb-2">
+        Task:
+      </label>
       <input
-      className="w-full p-2 rounded-md bg-zinc-600 mb-2"
+        className="w-full p-2 rounded-md bg-zinc-600 mb-2"
         name="title"
         type="text"
         placeholder="title"
         onChange={handleChange}
         value={task.title}
       />
-      <label htmlFor="description" className="block text-xs font-bold mb-2">Description:</label>
+      <label htmlFor="description" className="block text-xs font-bold mb-2">
+        Description:
+      </label>
       <textarea
-      className="w-full p-2 rounded-md bg-zinc-600 mb-2"
+        className="w-full p-2 rounded-md bg-zinc-600 mb-2"
         name="description"
         placeholder="description"
         onChange={handleChange}

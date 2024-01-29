@@ -5,7 +5,7 @@ import TasksList from "./components/TasksList";
 import { RootState } from "./app/store";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
+const App: React.FC = () => {
   useSelector((state: RootState) => state.tasks);
   return (
     <div className="bg-zinc-900 h-screen text-white">
